@@ -1,0 +1,1 @@
+ALTER TABLE `menu_menus` DROP `position`;

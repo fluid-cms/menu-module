@@ -1,0 +1,39 @@
+parameters:
+	routing:
+		base:
+			500: ['[<slug>]', 'Menu:Page:default']
+
+	controls:
+		menu:
+			class: Grapesc\GrapeFluid\MenuModule\Control\MenuControlFactory
+			desc: 'Slouží pro vypsání položek určeného menu'
+			params:
+				name: [string, 'Jméno / Identifikátor']
+				parent_class: [string, 'Třída rodiče - &#60;ul&#62; tag']
+				child_class: [string, 'Třída dítěte - &#60;li&#62; tag / Popř. &#60;a&#62; tagu pokud přeskakujeme &#60;ul&#62; a &#60;li&#62;']
+				anchors_only: [bool, 'Vypíše pouze &#60;a&#62; tagy (přeskočí &#60;ul&#62; a &#60;li&#62;)']
+
+	backend:
+		auth:
+			menu: 'menu'
+		menu:
+			Menu:
+				order: 32
+				icon: th-list
+				auth: '%backend.auth.menu%'
+				selected:
+					- ':Admin:Menu:edit'
+				submenu:
+					Přehled menu:
+						icon: 'th'
+						link: ':Admin:Menu:default'
+					Vytvořit menu:
+						icon: 'plus-circle'
+						link: ':Admin:Menu:create'
+
+
+services:
+	- Grapesc\GrapeFluid\MenuModel\Model\MenusModel
+	- Grapesc\GrapeFluid\MenuModel\Model\ItemModel
+	- Grapesc\GrapeFluid\MenuModule\MenuForm
+	- Grapesc\GrapeFluid\MenuModule\ItemForm

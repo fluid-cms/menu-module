@@ -1,0 +1,37 @@
+{extends $defaultTemplate}
+
+{define row-action-edit}
+    <a href="{$link}" class="btn btn-primary btn-xs" data-toggle="tooltip" title="Upravit">
+        <i class="fa fa-pencil"></i>
+    </a>
+{/define}
+
+{define header-cell-name}
+    <th>
+        Použítí v boxu
+    </th>
+{/define}
+
+{define body-cell-name}
+    <td>
+        <code>[%menu({$record->name})%]</code>
+    </td>
+{/define}
+
+{define header-cell-count}
+    <th>
+        Počet položek
+    </th>
+{/define}
+
+{define body-cell-count}
+    <td>
+        {$record->related('menu_item.menu_id')->count('*')}
+    </td>
+{/define}
+
+{define row-action-delete}
+    <a href="{$link}" class="btn btn-danger btn-xs tw-ajax" data-ajax="on" data-confirm="Opravdu chcete stránku smazat?" data-toggle="tooltip" title="Smazat">
+        <i class="fa fa-times"></i>
+    </a>
+{/define}

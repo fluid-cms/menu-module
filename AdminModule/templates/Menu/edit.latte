@@ -1,0 +1,195 @@
+{block content}
+
+    {include '@help.latte'}
+
+    <h1 class="page-header">
+        {block title}Úprava menu{/block}
+        <span class="button-area">
+            <a href="#help" data-toggle="modal" class="btn btn-info"><i class="fa fa-info-circle"></i> Nápověda</a>
+        </span>
+    </h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    {snippet menuControl}
+                        {control menuForm}
+                    {/snippet}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Položky v menu
+                </div>
+                <div class="panel-body" n:snippet="items">
+                    {if count($items) > 0}
+                        <ul class="list-group" n:inner-foreach="$items as $item" style="margin-bottom: 0;" id="sortable">
+                            <li id="item_{$item->id}" class="list-group-item">
+                                <i n:if="$item->icon != empty" class="fa fa-{$item->icon} fa-fw" data-toggle="tooltip" title="Vaše ikona"></i>
+                                <i n:if="$item->main" class="fa fa-star text-info" data-toggle="tooltip" title="Toto je úvodní stránka"></i>
+                                {if $item->custom}
+                                    <a href="{$item->url}" target="_blank">
+                                        <i class="fa fa-exclamation-circle" data-toggle="tooltip" title="Vlastní odkaz"></i> {$item->label}
+                                    </a>
+                                {elseif $item->url}
+                                    <a href="{if $item->params}{plink $item->url, (expand) json_decode($item->params, true)}{else}{plink $item->url}{/if}" target="_blank">
+                                        {$item->label}
+                                    </a>
+                                {/if}
+                                {if isset($edit) && $edit == $item->id} <b>(Právě upravujete)</b>{/if}
+                                <div class="pull-right">
+                                    <a data-toggle="tooltip" title="Táhnutím změníte pořadí" class="btn btn-default btn-xs move"><i class="fa fa-fw fa-arrows-v"></i></a>
+                                    <a data-toggle="tooltip" title="Upravit položku" n:href="editItem! $item->id" class="ajax btn btn-xs btn-primary">
+                                        <i class="fa fa-fw fa-pencil"></i>
+                                    </a>
+                                    <a data-toggle="tooltip" title="Označit jako hlavní stránku" n:href="promoteMain! $item->id" class="ajax btn btn-xs btn-info">
+                                        <i class="fa fa-fw fa-star"></i>
+                                    </a>
+                                    <a data-toggle="tooltip" title="Smazat položku" data-ajax="on" data-confirm="Opravdu chcete smazat položku?" n:href="deleteItem! $item->id" class="btn btn-xs btn-danger">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    {else}
+                        <ul class="list-group" style="margin-bottom: 0;">
+                            <li class="list-group-item" style="border: 0;">
+                                <i class="text-danger fa fa-warning"></i> Toto menu neobsahuje žádné položky
+                            </li>
+                        </ul>
+                    {/if}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Tvorba odkazu
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ul class="nav nav-tabs nav-justified" role="tablist">
+                                <li role="presentation" class="active form-diff" data-diff="basic"><a href="" role="tab" data-toggle="tab">Pro začátečníky</a></li>
+                                <li role="presentation" class="form-diff" data-diff="advanced"><a href="" role="tab" data-toggle="tab">Pro pokročilé</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="advForm">
+                                    <br />
+                                    {snippet itemControl}
+                                        {control itemForm}
+                                    {/snippet}
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="panel-group" id="categories">
+                                <div class="panel panel-default" n:foreach="$collections as $collection => $detail">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#categories" href="#{$collection}">
+                                                {_}{$detail['label']}{/_}
+                                                <i n:if="$detail['icon']" class="fa fa-{$detail['icon']} fa-fw pull-right"></i>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="{$collection}" class="panel-body collapse {$iterator->isFirst() ? "in" : ""}" style="padding: 0;">
+                                        <div class="list-group" style="margin-bottom: 0;">
+                                            <a href="javascript:;"
+                                               class="collection-item list-group-item"
+                                               data-title="{$title}"
+                                               data-url="{$url[0]}"
+                                               data-params="{isset($url[1]) ? $url[1] : '[]'}"
+                                                    n:foreach="$detail['collection'] as $title => $url">
+                                                {$title}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{/block}
+
+{block scripts}
+    <script>
+
+        initCollections();
+        $('[data-advanced]').each(function(index, elm) {
+            $(elm).parents().eq(1).css("display", "none");
+        });
+
+        function initCollections() {
+            $('.collection-item').click(function (e) {
+                $('#frm-itemForm-fluidForm-label').val($(this).data('title'));
+                $('#frm-itemForm-fluidForm-url').val($(this).data('url'));
+                $('#frm-itemForm-fluidForm-params').val(JSON.stringify($(this).data('params')));
+            });
+
+            $('.form-diff').click(function() {
+                var inputs = $('[data-advanced]');
+                if ($(this).data('diff') == "advanced") {
+                    inputs.each(function(index, elm) {
+                        $(elm).parents().eq(1).css("display", "block");
+                    });
+                } else {
+                    inputs.each(function(index, elm) {
+                        $(elm).parents().eq(1).css("display", "none");
+                    });
+                }
+            });
+        }
+
+        $.nette.ext('collections', {
+            success: function () {
+                initCollections();
+                $('[data-advanced]').each(function(index, elm) {
+                    $(elm).parents().eq(1).css("display", "none");
+                });
+            }
+        });
+
+        function initSortable() {
+            $("#sortable").sortable({
+                start: function (event, ui) {
+                    ui.item.css("opacity", 0.5);
+                    ui.item.closest('btn-danger').css("display", "none");
+                },
+                handle: '.move',
+                tolerance: 'pointer',
+                helper: function(e, ui) {
+                    ui.children().each(function() {
+                        $(this).width($(this).width());
+                    });
+                    return ui;
+                },
+                update: function (event, ui) {
+                    var data = $(this).sortable('serialize');
+                    $.nette.ajax({
+                        data: data,
+                        type: 'POST',
+                        url: {link reorderMenuItems!}
+                    });
+                }
+            }).disableSelection();
+        }
+
+        initSortable();
+
+        $.nette.ext('sortable', {
+            success: function () {
+                initSortable();
+            }
+        });
+    </script>
+{/block}

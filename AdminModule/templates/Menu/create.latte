@@ -1,0 +1,22 @@
+{block content}
+
+    {include '@help.latte'}
+
+    <h1 class="page-header">
+        {block title}Tvorba nového menu{/block}
+        <span class="button-area">
+            <a href="#help" data-toggle="modal" class="btn btn-info"><i class="fa fa-info-circle"></i> Nápověda</a>
+        </span>
+    </h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    {snippet menuControl}
+                        {control menuForm}
+                    {/snippet}
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}

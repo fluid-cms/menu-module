@@ -1,0 +1,9 @@
+{block content}
+    <h1 class="page-header">
+        {block title}Přehled dostupných menu{/block}
+        <span class="button-area">
+            <a n:href=":Admin:Menu:create" class="btn btn-primary"><i class="fa fa-plus-circle"></i> Vytvořit menu</a>
+        </span>
+    </h1>
+    {control menuGrid}
+{/block}

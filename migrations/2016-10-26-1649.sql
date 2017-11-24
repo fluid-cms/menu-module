@@ -1,0 +1,1 @@
+ALTER TABLE `menu_item` ADD `class` VARCHAR(100) NOT NULL DEFAULT '' AFTER `icon`;

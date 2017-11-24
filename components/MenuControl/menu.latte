@@ -1,0 +1,37 @@
+<ul n:tag-if="!$anchorsOnly" n:class="$parent" n:inner-foreach="$items as $item">
+    {if $user->isAllowed('menu.item', 'read.' . $item->id)}
+    <li n:tag-if="!$anchorsOnly" n:class="($child), ($control->isActive($item->url, $item->params, $item->override) ? 'active')">
+        {if $item->custom}
+            <a n:class="$anchorsOnly ? ($child), $item->class" href="{$item->url}">
+                {if $item->icon != "empty"}
+                    <i class="fa fa-{$item->icon} fa-fw"></i>
+                {/if}
+                {$item->label}
+            </a>
+        {else}
+            {if $item->main}
+                <a n:class="$anchorsOnly ? ($child), $item->class" href={plink ':Menu:Page:'}>
+                    {if $item->icon != "empty"}
+                        <i class="fa fa-{$item->icon} fa-fw"></i>
+                    {/if}
+                    {$item->label}
+                </a>
+            {elseif $item->slug}
+                <a n:class="$anchorsOnly ? ($child), $item->class" href={plink ':Menu:Page:', $item->slug}>
+                    {if $item->icon != "empty"}
+                        <i class="fa fa-{$item->icon} fa-fw"></i>
+                    {/if}
+                    {$item->label}
+                </a>
+            {else}
+                <a n:class="$anchorsOnly ? ($child), $item->class" href={if $item->params}{plink $item->url, (expand) json_decode($item->params, true)}{else}{plink $item->url}{/if}>
+                    {if $item->icon != "empty"}
+                        <i class="fa fa-{$item->icon} fa-fw"></i>
+                    {/if}
+                    {$item->label}
+                </a>
+            {/if}
+        {/if}
+    </li>
+    {/if}
+</ul>

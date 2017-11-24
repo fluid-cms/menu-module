@@ -1,0 +1,1 @@
+ALTER TABLE `menu_item` ADD `slug` VARCHAR(50) NOT NULL AFTER `label`;

@@ -1,0 +1,1 @@
+ALTER TABLE `menu_item` ADD `icon` VARCHAR(50) NULL AFTER `position`;

@@ -1,0 +1,1 @@
+ALTER TABLE `menu_item` ADD `override` VARCHAR(255) NOT NULL AFTER `params`;

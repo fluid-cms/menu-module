@@ -1,0 +1,1 @@
+ALTER TABLE `menu_item` ADD `position` INT(3) NOT NULL DEFAULT '0' AFTER `main`;
