@@ -50,7 +50,7 @@ class MenuForm extends FluidForm
 		parent::onSubmitEvent($control, $form);
 
 		$presenter = $control->getPresenter();
-		$values = $form->getValues(true);
+		$values = $form->getValues('array');
 
 		$box = $this->menus->getMenu($values['name']);
 
