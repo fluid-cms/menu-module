@@ -82,7 +82,7 @@ class ItemForm extends FluidForm
 	protected function submit(Control $control, Form $form)
 	{
 		$presenter = $control->getPresenter();
-		$values    = $form->getValues(true);
+		$values    = $form->getValues('array');
 
 		if ($form->hasErrors()) {
 			$presenter->redrawControl('itemControl');
