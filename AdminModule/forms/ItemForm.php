@@ -99,7 +99,7 @@ class ItemForm extends FluidForm
 			} else  {
 				unset($values['id']);
 				$values['slug'] = Strings::webalize($values['slug'] == "" ? $values['label'] : $values['slug']);
-				$this->createdId = $this->items->insert($this->items->clearingValues($values));
+				$this->createdId = $this->items->insert($this->items->clearingValues($values))->id;
 				$presenter->flashMessage("Odkaz byl úspěšně přidán", "success");
 			}
 
